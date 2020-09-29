@@ -39,6 +39,7 @@
 #include <Library/SortLib.h>
 #include <Library/StageLib.h>
 #include <Library/ContainerLib.h>
+#include <Library/UniversalPayloadLib.h>
 #include <Guid/BootLoaderServiceGuid.h>
 #include <Guid/BootLoaderVersionGuid.h>
 #include <Guid/LoaderPlatformInfoGuid.h>
@@ -49,7 +50,6 @@
 #include <Guid/SmmInformationGuid.h>
 #include <Guid/AcpiTableGuid.h>
 #include <Guid/SmbiosTableGuid.h>
-#include <Standard/UniversalPayload.h>
 #include <Service/PlatformService.h>
 #include <Pi/PiBootMode.h>
 #include <FspEas.h>

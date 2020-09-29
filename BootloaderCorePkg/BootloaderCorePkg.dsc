@@ -119,6 +119,7 @@
   IoMmuLib|BootloaderCommonPkg/Library/IoMmuLib/IoMmuLib.inf
   MtrrLib|BootloaderCommonPkg/Library/MtrrLib/MtrrLib.inf
   StringSupportLib|BootloaderCommonPkg/Library/StringSupportLib/StringSupportLib.inf
+  UniversalPayloadLib|BootloaderCommonPkg/Library/UniversalPayloadLib/UniversalPayloadLib.inf
 
 
 !if $(ENABLE_SOURCE_DEBUG)
