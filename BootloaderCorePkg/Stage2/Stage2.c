@@ -139,7 +139,8 @@ NormalBootPath (
   UINT32                         *Dst;
   PAYLOAD_ENTRY                   PldEntry;
   VOID                           *PldHobList;
-  UINTN                          PldBase;
+  UINTN                           PldBase;
+  UINT32                          TmpBase;
   LOADER_GLOBAL_DATA             *LdrGlobal;
   EFI_STATUS                      Status;
   BOOLEAN                         CallBoardNotify;
@@ -179,8 +180,10 @@ NormalBootPath (
     if (EFI_ERROR(Status)) {
       CpuHalt ("UPayload authentication failed !");
     }
-    Status = LoadUniversalPayload ((UINT32)(UINTN)Dst, (UNIVERSAL_PAYLOAD_ENTRY *)&PldEntry, &PldMachine);
-    if (EFI_ERROR(Status)) {
+    Status = LoadUniversalPayload ((UINT32)(UINTN)Dst, (UNIVERSAL_PAYLOAD_ENTRY *)&PldEntry, &TmpBase, &PldMachine);
+    if (!EFI_ERROR(Status)) {
+      PldBase = TmpBase;
+    } else {
       DEBUG ((DEBUG_ERROR, "UPayload load failed !\n"));
     }
   } else if (Dst[0] == 0x00005A4D) {
@@ -280,13 +283,16 @@ NormalBootPath (
   DEBUG_CODE_END ();
 
   DEBUG ((DEBUG_INFO, "Payload entry: 0x%08X\n", PldEntry));
+  if (PldBase != 0) {
+    DEBUG ((DEBUG_INFO, "Payload base: 0x%08X\n", PldBase));
+  }
   if (PldEntry != NULL) {
     DEBUG ((DEBUG_INIT, "Jump to payload\n\n"));
     if ((PldMachine == IMAGE_FILE_MACHINE_X64) && !IsLongModeEnabled ()) {
       if (IsLongModeSupported ()) {
         JumpToLongMode ((UINT64)(UINTN)PldEntry,
                         (UINT64)(UINTN)PldHobList,
-                        (UINT64)(UINTN)NULL,
+                        (UINT64)(UINTN)PldBase,
                         (UINT64)(UINTN)&NewStack);
       } else {
         CpuHalt ("Platform cannot support 64 bit payload !");
